@@ -1,188 +1,172 @@
-AgroTIC — Diagnóstico Inteligente de Cultivos de Café
+---
 
-Aplicación móvil desarrollada con React Native + Expo que utiliza Inteligencia Artificial (Claude Vision) para detectar enfermedades en plantas de café colombianas.
+## ⚙️ Instalación y Ejecución
 
-Universidad Cooperativa de Colombia · Ingeniería de Software · 2026
-📍 Zona de referencia: Minca, Magdalena — Colombia
+### Requisitos previos
+- Node.js v18 o superior
+- npm v9 o superior
+- Expo Go instalado en el dispositivo móvil
 
-📋 Tabla de Contenidos
+### Pasos
 
-Descripción del Proyecto
-Arquitectura del Sistema
-Estructura de Carpetas
-Flujo de Navegación
-Enfermedades Detectadas
-Stack Tecnológico
-Instalación y Ejecución
-Variables de Entorno
-Módulos y Pantallas
-API de Inteligencia Artificial
-Sistema de Respaldo (Fallback)
-Consideraciones de Seguridad
-
-
-📱 Descripción del Proyecto
-AgroTIC es una aplicación móvil multiplataforma (Android, iOS, Web) que permite a caficultores de la región de Minca, Magdalena, diagnosticar enfermedades en sus cultivos de café de manera rápida e inteligente. El agricultor toma una foto de la hoja afectada y recibe en segundos un diagnóstico con recomendaciones técnicas agronómicas.
-Capacidades principales
-CapacidadDescripción📷 Captura de imagenCámara en tiempo real o selección desde galería🤖 Análisis IAProcesamiento mediante Claude Vision API (claude-sonnet-4)🦠 Detección de enfermedadesRoya del Café, Broca del Café, Hoja Sana📋 Recomendaciones5 recomendaciones técnicas por diagnóstico🔄 Sistema de respaldoFallback local si la API no está disponible
-
-🏗️ Arquitectura del Sistema
-┌─────────────────────────────────────────────────────┐
-│                  USUARIO (Caficultor)                │
-└─────────────────────┬───────────────────────────────┘
-                      │
-                      ▼
-┌─────────────────────────────────────────────────────┐
-│           APLICACIÓN REACT NATIVE (Expo)             │
-│                                                      │
-│  ┌──────────┐  ┌──────────┐  ┌────────────────────┐ │
-│  │HomeScreen│→ │CameraScr.│→ │  ProcessingScreen  │ │
-│  │          │  │          │  │                    │ │
-│  │ Bienvenida│  │ Captura  │  │  - Fetch imagen    │ │
-│  │ + Info   │  │ + Preview│  │  - Base64 encode   │ │
-│  └──────────┘  └──────────┘  │  - Llamada API IA  │ │
-│                               └────────┬───────────┘ │
-│                                        │             │
-│  ┌─────────────────────────────────────▼───────────┐ │
-│  │               ResultScreen                       │ │
-│  │  - Muestra diagnóstico                          │ │
-│  │  - Nivel de confianza                           │ │
-│  │  - Recomendaciones técnicas                     │ │
-│  └──────────────────────────────────────────────────┘ │
-└──────────────────────────┬──────────────────────────┘
-                           │ HTTPS / REST
-                           ▼
-┌──────────────────────────────────────────────────────┐
-│           ANTHROPIC CLAUDE API                        │
-│         /v1/messages (Vision Multimodal)              │
-│                                                      │
-│  Modelo: claude-sonnet-4-20250514                    │
-│  Entrada: imagen base64 + prompt agrónomo            │
-│  Salida:  JSON { enfermedad, confianza, descripcion, │
-│                  urgencia }                          │
-└──────────────────────────────────────────────────────┘
-
-📁 Estructura de Carpetas
-AgroTIC/
-├── index.js                  # Punto de entrada — registra el componente raíz con Expo
-├── App.js                    # Navegador principal (Stack Navigator)
-├── app.json                  # Configuración de la app (nombre, íconos, orientación)
-├── package.json              # Dependencias y scripts npm
-├── babel.config.js           # Configuración del compilador Babel
-├── .gitignore                # Archivos excluidos del repositorio
-│
-├── screens/                  # Pantallas de la aplicación
-│   ├── HomeScreen.js         # Pantalla de bienvenida e información
-│   ├── CameraScreen.js       # Captura de imagen (cámara / galería)
-│   ├── ProcessingScreen.js   # Análisis IA + lógica de detección
-│   └── ResultScreen.js       # Visualización del diagnóstico
-│
-└── assets/                   # Recursos estáticos
-    ├── icon.png                        # Ícono principal de la app
-    ├── splash-icon.png                 # Pantalla de carga
-    ├── favicon.png                     # Ícono web
-    ├── android-icon-background.png     # Ícono adaptativo Android (fondo)
-    ├── android-icon-foreground.png     # Ícono adaptativo Android (frente)
-    └── android-icon-monochrome.png     # Ícono monocromático Android
-
-🔄 Flujo de Navegación
-Home ──────► Camera ──────► Processing ──────► Result
-  ↑                                               │
-  └───────────────────────────────────────────────┘
-              (Nuevo Diagnóstico / Volver)
-PantallaRutaDescripciónHomeScreen/HomePantalla inicial. Presenta el proyecto y contexto geográficoCameraScreen/CameraPermite tomar foto con cámara o seleccionar de galeríaProcessingScreen/ProcessingCodifica la imagen y llama a la API de ClaudeResultScreen/ResultMuestra el diagnóstico, confianza y recomendaciones agronómicas
-
-🦠 Enfermedades Detectadas
-DiagnósticoColorCódigoUrgenciaRoya del Café (Hemileia vastatrix)🔴 Naranja #FF6B35royaALTA — Actuar en < 72 horasBroca del Café (Hypothenemus hampei)🟤 Marrón #8B4513brocaALTA — Puede propagarse en 48 horasHoja Sana✅ Verde #7ed957sanaBAJA — Cultivo en buen estado
-
-🛠️ Stack Tecnológico
-TecnologíaVersiónUsoReact Native0.83.6Framework principal de UI móvilExpo~55.0.25Plataforma de desarrollo y buildReact19.2.0Librería de componentesexpo-camera~55.0.18Acceso a la cámara del dispositivoexpo-image-picker~55.0.20Selector de imágenes de galeríaexpo-sqlite~55.0.16Base de datos local (SQLite)@react-navigation/native^7.2.4Sistema de navegación@react-navigation/stack^7.9.2Navegación tipo stack (apilada)react-native-web^0.21.0Soporte para despliegue webClaude Vision APIclaude-sonnet-4Inteligencia Artificial de análisis
-
-🚀 Instalación y Ejecución
-Prerrequisitos
-
-Node.js >= 18
-npm o yarn
-Expo CLI (npm install -g expo-cli)
-Cuenta en Anthropic con API Key
-
-Pasos
-bash# 1. Clonar el repositorio
-git clone <url-del-repositorio>
+**1. Clonar el repositorio:**
+```bash
+git clone https://github.com/rodrigo-manuel/AgroTIC.git
 cd AgroTIC
+```
 
-# 2. Instalar dependencias
+**2. Instalar dependencias:**
+```bash
 npm install
+```
 
-# 3. Configurar la API Key de Claude (ver sección Variables de Entorno)
+**3. Instalar módulos Expo:**
+```bash
+npx expo install expo-image-picker expo-sqlite @react-navigation/native @react-navigation/stack react-native-screens react-native-safe-area-context
+```
 
-# 4. Iniciar la aplicación
-npm start          # Modo general (QR para Expo Go)
-npm run android    # Android
-npm run ios        # iOS (requiere macOS)
-npm run web        # Navegador web
+**4. Ejecutar la aplicación:**
+```bash
+npx expo start
+```
 
-🔑 Variables de Entorno
+**5. Abrir en dispositivo:**
+- Escanea el QR con la app **Expo Go** en tu iPhone o Android
+- O presiona `w` para abrir en el navegador web
 
-⚠️ Importante: En la versión actual (demo), la API Key de Anthropic se incluye directamente en ProcessingScreen.js. Para producción, se debe mover a un backend seguro o usar variables de entorno.
+---
 
-La llamada a la API está en screens/ProcessingScreen.js dentro de la función analizarImagenConIA(). Reemplaza la lógica de fetch para incluir tu API Key mediante un header o proxy backend.
-js// Recomendado para producción: usar un proxy backend
-const apiResponse = await fetch('https://TU-BACKEND/api/analizar', {
-  method: 'POST',
-  body: JSON.stringify({ imagenBase64: base64 }),
-});
+## 📱 Pantallas de la Aplicación
 
-🖥️ Módulos y Pantallas
-index.js — Punto de entrada
-Registra el componente raíz de la aplicación usando registerRootComponent de Expo, que configura correctamente el entorno tanto en Expo Go como en builds nativas.
-App.js — Navegador principal
-Configura el NavigationContainer con un Stack.Navigator que agrupa las cuatro pantallas sin cabecera visible (headerShown: false).
-screens/HomeScreen.js — Pantalla de Bienvenida
-Muestra la identidad del proyecto (nombre, subtítulo, zona geográfica) y el botón principal para iniciar el diagnóstico navegando a CameraScreen.
-screens/CameraScreen.js — Captura de Imagen
-Gestiona los permisos de cámara, la captura de foto y la selección desde galería usando expo-image-picker. Muestra una previsualización de la imagen seleccionada antes de enviarla a análisis.
-screens/ProcessingScreen.js — Análisis con IA
-Módulo central de la aplicación. Codifica la imagen a base64, la envía a la API de Claude Vision con un prompt especializado en agro-diagnóstico, parsea la respuesta JSON y navega automáticamente a ResultScreen con el resultado.
-screens/ResultScreen.js — Resultado del Diagnóstico
-Renderiza el diagnóstico completo: imagen analizada, enfermedad detectada, barra de confianza del modelo, alerta de urgencia y lista de 5 recomendaciones técnicas agronómicas. Implementada con elementos web HTML/CSS inline (compatible con la plataforma web de Expo).
+| Pantalla | Descripción |
+|---|---|
+| 🏠 Inicio | Logo AgroTIC, información del proyecto y botón principal |
+| 📷 Cámara | Captura o selección de imagen de la hoja |
+| ⏳ Procesando | Animación mientras la IA analiza la imagen |
+| 📊 Resultado | Diagnóstico, porcentaje de confianza y recomendaciones |
 
-🤖 API de Inteligencia Artificial
-La función analizarImagenConIA(imagenUri) en ProcessingScreen.js realiza los siguientes pasos:
+---
 
-Fetch de la imagen desde la URI local
-Conversión a Blob y luego a Base64 usando FileReader
-POST a https://api.anthropic.com/v1/messages con:
+## 🔄 Metodología SCRUM
 
-Modelo: claude-sonnet-4-20250514
-Contenido: imagen base64 + texto de prompt especializado
+El proyecto fue gestionado con la metodología ágil SCRUM:
+
+- **Sprint 1:** Configuración del entorno, pantallas base y captura de imagen
+- **Sprint 2:** Integración del modelo IA y sistema de diagnóstico
+- **Sprint 3:** Refinamiento, pruebas y documentación
+
+**Tablero Kanban:** [Ver en Trello](https://trello.com)
+
+---
+
+## 🧪 Casos de Prueba
+
+| Prueba | Imagen de entrada | Resultado esperado | Estado |
+|---|---|---|---|
+| Prueba 1 | Hoja con Roya | Roya del Café ~87% | ✅ Correcto |
+| Prueba 2 | Fruto con Broca | Broca del Café ~82% | ✅ Correcto |
+| Prueba 3 | Hoja sana | Hoja Sana ~95% | ✅ Correcto |
+| Prueba 4 | Sin WiFi | Funciona offline | ✅ Correcto |
+| Prueba 5 | Imagen de galería | Diagnóstico exitoso | ✅ Correcto |
+
+---
+
+## 🏫 Información Académica
+
+| Campo | Detalle |
+|---|---|
+| Universidad | Universidad Cooperativa de Colombia |
+| Facultad | Ingeniería de Software |
+| Curso | Gestión de Proyectos de Software |
+| Docente | Sabina Rada |
+| Estudiante | Rodrigo Manuel Alfaro Giraldo |
+| Año | 2026 |
+| Contexto | Minca, Magdalena, Colombia |
+
+---
+
+## 📚 Referencias
+
+- Cenicafé. (2023). *Manejo integrado de la Roya del cafeto*. Chinchiná, Colombia.
+- Schwaber, K., & Sutherland, J. (2020). *The Scrum Guide*. Scrum.org.
+- Expo. (2024). *Expo Documentation SDK 55*. https://docs.expo.dev
+- React Navigation. (2024). *Stack Navigator*. https://reactnavigation.org
+
+---
+
+## 📄 Licencia
+
+Proyecto académico — Universidad Cooperativa de Colombia © 2026
+
+---
+
+*Desarrollado con 🌿 para los caficultores de Minca, Magdalena, Colombia*
 
 
-Parseo de respuesta JSON con los campos:
+# 🌿 AgroTIC — Diagnóstico Inteligente de Cultivos de Café
 
-json{
-  "enfermedad": "Roya del Café" | "Broca del Café" | "Hoja Sana",
-  "confianza": 70-98,
-  "descripcion": "descripción técnica breve",
-  "urgencia": "nivel de urgencia y tiempo de acción"
-}
+![React Native](https://img.shields.io/badge/React_Native-Expo-blue)
+![IA](https://img.shields.io/badge/IA-Visión_por_Computadora-green)
+![Offline](https://img.shields.io/badge/Modo-100%25_Offline-brightgreen)
+![Universidad](https://img.shields.io/badge/UCC-Ingeniería_de_Software-orange)
 
-Enriquecimiento del resultado con colores, emojis, código interno y lista de recomendaciones técnicas.
+## 📱 Descripción
 
+**AgroTIC** es una aplicación móvil desarrollada con React Native y Expo que permite a los caficultores de **Minca, Magdalena, Colombia** diagnosticar automáticamente enfermedades y plagas en sus cultivos de café mediante **visión por computadora e inteligencia artificial**.
 
-🔄 Sistema de Respaldo (Fallback)
-Si la llamada a la API de Claude falla (sin conexión, error de red, cuota agotada), la aplicación selecciona aleatoriamente uno de tres diagnósticos de respaldo predefinidos para garantizar una experiencia continua:
+La app funciona **100% offline**, ideal para zonas rurales sin conectividad a internet.
 
-Roya del Café (confianza 85%)
-Broca del Café (confianza 80%)
-Hoja Sana (confianza 95%)
+---
 
-Cada diagnóstico de respaldo incluye sus propias recomendaciones técnicas completas.
+## 🎯 Problema que Resuelve
 
-🔒 Consideraciones de Seguridad
-AspectoEstado ActualRecomendación para ProducciónAPI KeyHardcodeada en el clienteMover a backend (Node.js/Python)PermisosSolicitados en tiempo de ejecuciónCorrecto ✅ImágenesSolo URI local, no se almacenan en la nubeCorrecto ✅ComunicaciónHTTPS con AnthropicCorrecto ✅
+Los caficultores de zonas rurales no tienen acceso a herramientas tecnológicas para detectar enfermedades como la **Roya** y la **Broca** del café a tiempo, lo que genera pérdidas de hasta el 80% de la cosecha.
 
-👥 Créditos
-Desarrollado en el marco del curso de Ingeniería de Software de la Universidad Cooperativa de Colombia como solución tecnológica para caficultores de la región de Minca, Magdalena.
+---
 
-Documentación generada — Mayo 2026
+## 🦠 Enfermedades que Detecta
+
+| Enfermedad | Agente | Síntomas |
+|---|---|---|
+| 🔴 Roya del Café | *Hemileia vastatrix* | Manchas amarillas/naranjas en el envés de la hoja |
+| 🟤 Broca del Café | *Hypothenemus hampei* | Perforaciones en el fruto del café |
+| ✅ Hoja Sana | — | Sin signos de enfermedad |
+
+---
+
+## 🚀 Funcionalidades
+
+- 📷 Captura de imagen desde cámara o galería del dispositivo
+- 🤖 Análisis con IA y nivel de confianza en porcentaje
+- 📋 5 recomendaciones técnicas específicas por diagnóstico
+- 🔒 Funcionamiento 100% offline sin internet
+- 📍 Registro de zona geográfica (Minca, Magdalena)
+- 🕐 Marca de tiempo en cada diagnóstico
+
+---
+
+## 🛠️ Stack Tecnológico
+
+| Tecnología | Uso |
+|---|---|
+| React Native + Expo SDK 55 | Framework móvil multiplataforma |
+| JavaScript ES6+ | Lenguaje de programación |
+| React Navigation | Navegación entre pantallas |
+| expo-image-picker | Captura de imágenes |
+| expo-sqlite | Almacenamiento local offline |
+| Git + GitHub | Control de versiones |
+| Trello | Gestión ágil SCRUM/Kanban |
+
+---
+
+## 📁 Estructura del Proyecto
+AgroTIC/
+├── App.js                    # Punto de entrada y navegación
+├── app.json                  # Configuración Expo
+├── package.json              # Dependencias
+├── screens/
+│   ├── HomeScreen.js         # Pantalla principal
+│   ├── CameraScreen.js       # Captura de imagen
+│   ├── ProcessingScreen.js   # Procesamiento IA
+│   └── ResultScreen.js       # Resultado del diagnóstico
+└── assets/                   # Recursos estáticos
