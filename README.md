@@ -1,42 +1,25 @@
 # 🌿 AgroTIC — Diagnóstico Inteligente de Cultivos de Café
 
 ![React Native](https://img.shields.io/badge/React_Native-Expo-blue)
-![IA](https://img.shields.io/badge/IA-Visión_por_Computadora-green)
+![Prototipo](https://img.shields.io/badge/Estado-Prototipo_de_interfaz-yellow)
 ![Offline](https://img.shields.io/badge/Modo-100%25_Offline-brightgreen)
 ![Universidad](https://img.shields.io/badge/UCC-Ingeniería_de_Software-orange)
 
 ## 📱 Descripción
 
-AgroTIC es una aplicación móvil desarrollada con React Native y Expo que permite a los caficultores de Minca, Magdalena, Colombia diagnosticar automáticamente enfermedades y plagas en sus cultivos de café mediante visión por computadora e inteligencia artificial.
+AgroTIC es el **prototipo de interfaz** (React Native + Expo) con el que validé el flujo de una app de diagnóstico de enfermedades del café para caficultores de Minca, Magdalena: captura de la foto, pantalla de análisis, resultado con recomendaciones e historial local sin conexión.
 
-La app funciona 100% offline, ideal para zonas rurales sin conectividad a internet.
-
----
-
-## 🎯 Problema que Resuelve
-
-Los caficultores de zonas rurales no tienen acceso a herramientas tecnológicas para detectar enfermedades como la Roya y la Broca del café a tiempo, lo que genera pérdidas de hasta el 80% de la cosecha.
+> **Importante:** en este prototipo el resultado del análisis es **simulado** (no hay un modelo de IA conectado). La versión con modelos reales de visión por computadora ejecutándose en el teléfono es **[Gotera IA](https://github.com/rodrigo-manuel/gotera-ia)**, desarrollada en Kotlin.
 
 ---
 
-## 🦠 Enfermedades que Detecta
-
-| Enfermedad | Agente | Síntomas |
-|---|---|---|
-| Roya del Café | Hemileia vastatrix | Manchas amarillas y naranjas en el envés de la hoja |
-| Broca del Café | Hypothenemus hampei | Perforaciones en el fruto del café |
-| Hoja Sana | Sin agente | Sin signos de enfermedad |
-
----
-
-## 🚀 Funcionalidades
+## 🚀 Funcionalidades del prototipo
 
 - Captura de imagen desde cámara o galería del dispositivo
-- Análisis con IA y nivel de confianza en porcentaje
-- 5 recomendaciones técnicas específicas por diagnóstico
-- Funcionamiento 100% offline sin internet
-- Registro de zona geográfica (Minca, Magdalena)
-- Marca de tiempo en cada diagnóstico
+- Flujo de análisis con resultado y nivel de confianza (simulados)
+- 5 recomendaciones técnicas por diagnóstico (roya, broca y hoja sana)
+- Historial local sin conexión con expo-sqlite
+- Registro de zona geográfica (Minca, Magdalena) y marca de tiempo
 
 ---
 
@@ -102,7 +85,7 @@ Escanea el QR con la app Expo Go en tu iPhone o Android. O presiona w para abrir
 |---|---|
 | Inicio | Logo AgroTIC, información del proyecto y botón principal |
 | Cámara | Captura o selección de imagen de la hoja |
-| Procesando | Animación mientras la IA analiza la imagen |
+| Procesando | Animación del análisis (resultado simulado en el prototipo) |
 | Resultado | Diagnóstico, porcentaje de confianza y recomendaciones |
 
 ---
@@ -112,20 +95,20 @@ Escanea el QR con la app Expo Go en tu iPhone o Android. O presiona w para abrir
 El proyecto fue gestionado con la metodología ágil SCRUM:
 
 - Sprint 1: Configuración del entorno, pantallas base y captura de imagen
-- Sprint 2: Integración del modelo IA y sistema de diagnóstico
+- Sprint 2: Flujo de diagnóstico con resultados simulados y recomendaciones
 - Sprint 3: Refinamiento, pruebas y documentación
 
 ---
 
 ## 🧪 Casos de Prueba
 
-| Prueba | Imagen de entrada | Resultado esperado | Estado |
-|---|---|---|---|
-| Prueba 1 | Hoja con Roya | Roya del Café 87% | Correcto |
-| Prueba 2 | Fruto con Broca | Broca del Café 82% | Correcto |
-| Prueba 3 | Hoja sana | Hoja Sana 95% | Correcto |
-| Prueba 4 | Sin WiFi | Funciona offline | Correcto |
-| Prueba 5 | Imagen de galería | Diagnóstico exitoso | Correcto |
+| Prueba | Acción | Resultado esperado |
+|---|---|---|
+| Prueba 1 | Tomar foto con la cámara | La imagen pasa a la pantalla de análisis |
+| Prueba 2 | Elegir imagen de la galería | La imagen pasa a la pantalla de análisis |
+| Prueba 3 | Completar el análisis | Se muestran diagnóstico simulado y recomendaciones |
+| Prueba 4 | Sin WiFi | La app funciona y guarda el historial local |
+
 
 ---
 
